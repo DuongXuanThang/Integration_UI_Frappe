@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include frappeui *.css
+recursive-include frappeui *.csv
+recursive-include frappeui *.html
+recursive-include frappeui *.ico
+recursive-include frappeui *.js
+recursive-include frappeui *.json
+recursive-include frappeui *.md
+recursive-include frappeui *.png
+recursive-include frappeui *.py
+recursive-include frappeui *.svg
+recursive-include frappeui *.txt
+recursive-exclude frappeui *.pyc
