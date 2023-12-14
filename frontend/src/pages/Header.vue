@@ -1,22 +1,35 @@
 <template>
-    <header>
-      <h1>My Vue App</h1>
-    </header>
-  </template>
-  
-  <script>
-  export default {
-    // Add component logic here
-  };
-  </script>
-  
-  <style scoped>
-  /* Add styling for the header */
-  header {
-    background-color: #811AF7;
-    color: white;
-    padding: 10px;
-    text-align: left;
-    height: 50px; 
-  }
-  </style>
+  <header>
+    <h1>My Vue App</h1>
+    <div class="header-icons">
+      <i class="fas fa-search"></i>
+      <i class="fas fa-bell"></i>
+      <i class="fas fa-user"></i>
+    </div>
+  </header>
+</template>
+
+<script>
+import '@fortawesome/fontawesome-free/css/all.css'
+export default {
+  // Add component logic here
+}
+</script>
+
+<style scoped>
+/* Add styling for the header */
+header {
+  display: flex;
+  background-color: #811af7;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  height: 50px;
+}
+.header-icons {
+  margin-left: auto;
+}
+.header-icons i {
+  margin-right: 10px; /* Set margin-right to 10px for each icon */
+}
+</style>

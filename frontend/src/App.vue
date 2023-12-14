@@ -33,6 +33,6 @@ export default {
 
 .app-container {
   display: flex;
-  height: calc(100% - 50px); /* Subtract header height */
+  height: calc(100vh - 50px); /* Subtract header height */
 }
 </style>

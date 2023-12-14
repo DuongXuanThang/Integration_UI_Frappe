@@ -8,7 +8,8 @@
  "engine": "InnoDB",
  "field_order": [
   "product_name",
-  "product_information"
+  "product_information",
+  "import_excel"
  ],
  "fields": [
   {
@@ -20,11 +21,16 @@
    "fieldname": "product_information",
    "fieldtype": "Data",
    "label": "Product Information"
+  },
+  {
+   "fieldname": "import_excel",
+   "fieldtype": "Attach",
+   "label": "Import Excel"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-08 00:32:02.304960",
+ "modified": "2023-12-11 18:30:40.293653",
  "modified_by": "Administrator",
  "module": "APP_UI",
  "name": "Product_VGM",

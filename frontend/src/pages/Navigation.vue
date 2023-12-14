@@ -18,11 +18,11 @@
   <style scoped>
   /* Add styling for the navigation */
   nav {
-    background-color: #2c3e50;
+    background-color: #D0CED0;
     color: white;
     padding: 10px;
     width: 20%; /* Set width to 20% for 1:4 ratio */
-    height: 100%; /* Set minimum height to 100% viewport height */
+    min-height: 100%; /* Set minimum height to 100% viewport height */
   }
   
   ul {

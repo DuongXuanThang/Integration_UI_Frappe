@@ -16,7 +16,6 @@
   div {
     padding: 20px;
     width: 80%; /* Set width to 80% for 1:4 ratio */
-    height: 100%;
   }
   </style>
   
