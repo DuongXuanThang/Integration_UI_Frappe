@@ -6,11 +6,15 @@ const routes = [
     name: 'Home',
     component: () => import('@/pages/Home.vue'),
   },
+  {
+    path: '/about',
+    name: 'About',
+    component: () => import('@/pages/About.vue'),
+  }
 ]
 
 let router = createRouter({
   history: createWebHistory('/frontend'),
   routes,
 })
-
 export default router
