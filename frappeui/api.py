@@ -4,4 +4,4 @@ import frappe
 def get_product_list():
     print('Get Product List')
     products = frappe.get_all('Product_VGM')
-    return "success"
+    return products

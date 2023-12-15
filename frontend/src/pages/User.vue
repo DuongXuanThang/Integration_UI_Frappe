@@ -17,6 +17,7 @@
   div {
     background-color: #ecf0f1;
     padding: 10px;
+    height: 100%;
   }
   </style>
   

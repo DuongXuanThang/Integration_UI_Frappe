@@ -14,8 +14,8 @@
   <style scoped>
   /* Add styling for the content */
   div {
-    padding: 20px;
-    width: 80%; /* Set width to 80% for 1:4 ratio */
+    padding: 10px;
+    width: 100%; /* Set width to 80% for 1:4 ratio */
   }
   </style>
   

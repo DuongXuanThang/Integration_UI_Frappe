@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h1>My Vue App</h1>
+    <h1>VGM APP</h1>
     <div class="header-icons">
       <i class="fas fa-search"></i>
       <i class="fas fa-bell"></i>
@@ -25,11 +25,12 @@ header {
   padding: 10px;
   text-align: left;
   height: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .header-icons {
   margin-left: auto;
 }
 .header-icons i {
-  margin-right: 10px; /* Set margin-right to 10px for each icon */
+  margin-right: 30px; /* Set margin-right to 10px for each icon */
 }
 </style>
