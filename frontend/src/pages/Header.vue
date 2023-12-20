@@ -5,14 +5,48 @@
       <i class="fas fa-search"></i>
       <i class="fas fa-bell"></i>
       <i class="fas fa-user"></i>
+      <!-- <Button
+  :variant="'solid'"
+  theme="gray"
+  size="sm"
+  label="Button"
+  :loading="false"
+  :loadingText="null"
+  :disabled="false"
+  :link="null"
+>
+  Click
+</Button> -->
+<Dropdown :options="dropdownOptions"  :button="{label: 'Actions', }"  />
     </div>
   </header>
 </template>
 
-<script>
+<script >
 import '@fortawesome/fontawesome-free/css/all.css'
+import { h } from 'vue';
+import { Dropdown,FeatherIcon } from 'frappe-ui';
 export default {
-  // Add component logic here
+  components: {
+    Dropdown,
+    FeatherIcon
+  },
+  data() {
+    return {
+      dropdownOptions: [
+        { label: 'Đăng xuất', icon: () => h(FeatherIcon, { name: 'edit' }),onClick: () => {
+          console.log('123');
+        }},
+        { label: 'Thông tin người dùng',icon: () => h(FeatherIcon, { name: 'user' }), },
+      ],
+    };
+  },
+  methods: {
+    handleDropdownClick(event) {
+      console.log('Dropdown clicked!', event);
+      // Xử lý logic khi dropdown được click
+    },
+  },
 }
 </script>
 
