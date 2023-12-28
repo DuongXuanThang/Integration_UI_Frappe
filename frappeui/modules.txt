@@ -1,2 +1,1 @@
-FrappeUI
-APP_UI
+Frappe UI

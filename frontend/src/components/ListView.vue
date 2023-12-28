@@ -12,26 +12,22 @@
       <div
         class="mb-1 grid items-center rounded bg-gray-100 py-2 pl-2 pr-4 overflow-x-hidden"
         :style="{ gridTemplateColumns: tableColumnsGridWidth }">
-        <Checkbox
-          class="cursor-pointer duration-300 z-10"
-          :modelValue="
-            selectedEntities?.length > 1 &&
-            selectedEntities?.length === folderContents?.length
-          "
-          @click.stop="toggleSelectAll" />
-        <div class="flex w-full items-center text-base text-gray-600">Name</div>
+       
+        <div class="flex w-full items-center  text-base text-gray-600"></div>
         <div
-          class="flex w-full items-center justify-start text-base text-gray-600">
-          Owner
+          class="flex w-full items-center  text-base text-gray-600">
+          Product Name
         </div>
+        <div
+          class="flex w-full items-center  text-base text-gray-600">
+          Product Information
+        </div>
+       
         <div
           class="flex w-full items-center justify-end text-base text-gray-600">
           Last Modified
         </div>
-        <div
-          class="flex w-full items-center justify-end text-base text-gray-600">
-          Size
-        </div>
+     
       </div>
       <div
         v-for="entity in folderContents"
@@ -55,9 +51,6 @@
         @dragover.prevent
         @mousedown.stop
         @drop="isGroupOnDrop(entity)">
-        <Checkbox
-          :modelValue="selectedEntities.includes(entity)"
-          class="duration-300 invisible group-hover:visible checked:visible" />
         <div
           class="flex items-center text-gray-800 text-sm font-medium truncate"
           :draggable="false">
@@ -73,20 +66,20 @@
           </svg>
           <img
             v-else
-            :src="getIconUrl(formatMimeType(entity.mime_type))"
+         
             :draggable="false"
             class="h-[20px] mr-3" />
           {{ entity.title }}
         </div>
         <div
           class="flex items-center justify-start text-gray-800 text-sm font-medium truncate">
-          <Avatar
-            :image="entity.user_image"
-            :label="entity.full_name"
-            class="mr-2"
-            size="lg" />
-          {{ entity.owner }}
+          {{ entity.product_name }}
         </div>
+        <div
+          class="flex items-center justify-start text-gray-800 text-sm font-medium truncate">
+          {{ entity.product_information }}
+        </div>
+        
         <div
           class="flex items-center justify-end text-gray-800 text-sm font-medium truncate">
           {{ entity.modified }}
@@ -104,15 +97,14 @@
   </div>
 </template>
 <script>
-import { Avatar, Checkbox } from "frappe-ui";
-import { formatMimeType } from "@/utils/format";
-import { getIconUrl } from "@/utils/getIconUrl";
-import { calculateRectangle, handleDragSelect } from "@/utils/dragSelect";
+import { Avatar} from "frappe-ui";
+// import { formatMimeType } from "@/utils/format";
+// import { getIconUrl } from "@/utils/getIconUrl";
+// import { calculateRectangle, handleDragSelect } from "@/utils/dragSelect";
 
 export default {
   name: "GridView",
   components: {
-    Checkbox,
     Avatar,
   },
   props: {
@@ -133,7 +125,7 @@ export default {
     "fetchFolderContents",
   ],
   setup() {
-    return { formatMimeType, getIconUrl };
+    // return { formatMimeType, getIconUrl };
   },
   data: () => ({
     selectionElementStyle: {},
@@ -205,9 +197,9 @@ export default {
       this.selectionCoordinates.y1 = event.clientY;
       this.selectionCoordinates.x2 = event.clientX;
       this.selectionCoordinates.y2 = event.clientY;
-      this.selectionElementStyle = calculateRectangle(
-        this.selectionCoordinates
-      );
+      // this.selectionElementStyle = calculateRectangle(
+      //   this.selectionCoordinates
+      // );
     },
     handleMousemove(event) {
       if (event.which != 1 || !this.selectionCoordinates.x1) return;
@@ -219,15 +211,15 @@ export default {
         this.containerRect.top,
         Math.min(this.containerRect.bottom, event.clientY)
       );
-      this.selectionElementStyle = calculateRectangle(
-        this.selectionCoordinates
-      );
+      // this.selectionElementStyle = calculateRectangle(
+      //   this.selectionCoordinates
+      // );
       const entityElements = this.$el.querySelectorAll(".entity");
-      const selectedEntities = handleDragSelect(
-        entityElements,
-        this.selectionCoordinates,
-        this.folderContents
-      );
+      // const selectedEntities = handleDragSelect(
+      //   entityElements,
+      //   this.selectionCoordinates,
+      //   this.folderContents
+      // );
       this.$emit("entitySelected", selectedEntities);
       this.$store.commit("setEntityInfo", selectedEntities);
     },
@@ -236,12 +228,6 @@ export default {
     },
     updateContainerRect() {
       this.containerRect = this.$refs["container"]?.getBoundingClientRect();
-    },
-    getFileSubtitle(file) {
-      let fileSubtitle = formatMimeType(file.mime_type);
-      fileSubtitle =
-        fileSubtitle.charAt(0).toUpperCase() + fileSubtitle.slice(1);
-      return `${fileSubtitle} ∙ ${file.modified}`;
     },
     selectEntity(entity, event, entities) {
       this.$emit("showEntityContext", null);
@@ -333,20 +319,20 @@ export default {
   },
   resources: {
     moveEntity() {
-      return {
-        url: "drive.api.files.call_controller_method",
-        method: "POST",
-        params: {
-          method: "move",
-          entity_name: "entity name",
-          new_parent: "new entity parent",
-        },
-        validate(params) {
-          if (!params?.new_parent) {
-            return "New parent is required";
-          }
-        },
-      };
+      // return {
+      //   url: "drive.api.files.call_controller_method",
+      //   method: "POST",
+      //   params: {
+      //     method: "move",
+      //     entity_name: "entity name",
+      //     new_parent: "new entity parent",
+      //   },
+      //   validate(params) {
+      //     if (!params?.new_parent) {
+      //       return "New parent is required";
+      //     }
+      //   },
+      // };
     },
   },
 };

@@ -10,7 +10,7 @@ setup(
 	name="frappeui",
 	version=version,
 	description="FrappeUI",
-	author="yes",
+	author="y",
 	author_email="xuanthang1909972@gmail.com",
 	packages=find_packages(),
 	zip_safe=False,

@@ -1,8 +1,8 @@
 from . import __version__ as app_version
 
 app_name = "frappeui"
-app_title = "FrappeUI"
-app_publisher = "yes"
+app_title = "Frappe UI"
+app_publisher = "y"
 app_description = "FrappeUI"
 app_email = "xuanthang1909972@gmail.com"
 app_license = "MIT"
