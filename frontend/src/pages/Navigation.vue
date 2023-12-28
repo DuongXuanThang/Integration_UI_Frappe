@@ -30,6 +30,7 @@ ul {
   height: 50px;
   cursor: pointer;
   transition: background-color 0.3s ease; /* Add transition for smooth effect */
+  font-size: 15px;
 }
 
 /* Add hover effect for nav-link */

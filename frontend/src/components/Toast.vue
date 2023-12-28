@@ -1,20 +1,21 @@
 <template>
   <div
-    class="my-2 min-w-[15rem] max-w-[45rem] rounded-md border bg-white p-3 shadow-[0_4px_12px_#0000001a]">
-    <div class="flex place-items-center">
-      <FeatherIcon
-        v-if="icon"
-        :name="icon"
-        :class="['h-4.5 w-4.5 mr-2', iconClasses]" />
+    class="my-2 min-w-[15rem] max-w-[40rem] rounded-lg border bg-white p-4 shadow-md"
+  >
+    <div class="flex items-start">
+      <div v-if="icon" class="mr-3 grid h-5 w-5 place-items-center">
+        <FeatherIcon :name="icon" :class="['h-5 w-5', iconClasses]" />
+      </div>
       <div>
         <slot>
           <p
             v-if="title"
             class="text-base font-medium text-gray-900"
-            :class="{ 'mb-1': text }">
+            :class="{ 'mb-1': text }"
+          >
             {{ title }}
           </p>
-          <p v-if="text" class="text-sm text-gray-600">
+          <p v-if="text" class="text-base text-gray-600">
             {{ text }}
           </p>
         </slot>
@@ -23,7 +24,8 @@
         <slot name="actions">
           <button
             class="grid h-5 w-5 place-items-center rounded hover:bg-gray-100"
-            @click="$emit('close')">
+            @click="$emit('close')"
+          >
             <FeatherIcon name="x" class="h-4 w-4 text-gray-700" />
           </button>
         </slot>
@@ -32,22 +34,22 @@
   </div>
 </template>
 <script>
-import { FeatherIcon } from "frappe-ui";
+import FeatherIcon from './FeatherIcon.vue'
 const positions = [
-  "top-right",
-  "top-center",
-  "top-left",
-  "bottom-right",
-  "bottom-center",
-  "bottom-left",
-];
+  'top-right',
+  'top-center',
+  'top-left',
+  'bottom-right',
+  'bottom-center',
+  'bottom-left',
+]
 
 export default {
-  name: "Toast",
+  name: 'Toast',
   props: {
     position: {
       type: String,
-      default: "top-center",
+      default: 'top-center',
     },
     icon: {
       type: String,
@@ -66,16 +68,16 @@ export default {
       default: 5,
     },
   },
-  emits: ["close"],
+  emits: ['close'],
   components: {
     FeatherIcon,
   },
   mounted() {
     if (this.timeout > 0) {
       setTimeout(() => {
-        this.$emit("close");
-      }, this.timeout * 1000);
+        this.$emit('close')
+      }, this.timeout * 1000)
     }
   },
-};
+}
 </script>

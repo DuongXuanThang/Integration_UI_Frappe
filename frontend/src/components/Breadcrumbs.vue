@@ -1,125 +1,108 @@
 <template>
-  <div class="flex justify-items-center items-center text-base">
-    <router-link
-      v-for="(item, index) in breadcrumbLinks"
-      :key="item.label"
-      v-slot="{ href, navigate }"
-      class="text-lg font-medium text-gray-600"
-      :to="item.route">
-      <a
-        v-if="!isLastItem(index)"
-        :class="[
-          breadcrumbLinks.length === 1 || isLastItem(index)
-            ? 'text-black'
-            : ' hover:text-gray-800',
-        ]"
-        :href="href"
-        @click="navigate">
-        {{ item.label }}
-        <span v-if="breadcrumbLinks.length > 1" class="text-gray-600 pr-1">
-          {{ "/" }}
-        </span>
-      </a>
-      <span v-else class="text-black" @click="canShowRenameDialog">
-        {{ currentTitle }}
+  <div class="flex min-w-0 items-center">
+    <template v-if="dropdownItems.length">
+      <Dropdown class="h-7" :options="dropdownItems">
+        <Button variant="ghost">
+          <template #icon>
+            <svg
+              class="w-4 text-gray-600"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="19" cy="12" r="1" />
+              <circle cx="5" cy="12" r="1" />
+            </svg>
+          </template>
+        </Button>
+      </Dropdown>
+      <span class="ml-1 mr-0.5 text-base text-gray-500" aria-hidden="true">
+        /
       </span>
-    </router-link>
+    </template>
+    <div
+      class="flex min-w-0 items-center overflow-hidden text-ellipsis whitespace-nowrap"
+    >
+      <template v-for="(item, i) in crumbs" :key="item.label">
+        <component
+          :is="item.route ? 'router-link' : 'button'"
+          class="flex items-center rounded px-0.5 py-1 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          :class="[
+            i == crumbs.length - 1
+              ? 'text-gray-900'
+              : 'text-gray-600 hover:text-gray-700',
+          ]"
+          v-bind="item.route ? { to: item.route } : { onClick: item.onClick }"
+        >
+          <slot name="prefix" :item="item" />
+          <span>
+            {{ item.label }}
+          </span>
+        </component>
+        <span
+          v-if="i != crumbs.length - 1"
+          class="mx-0.5 text-base text-gray-500"
+          aria-hidden="true"
+        >
+          /
+        </span>
+      </template>
+    </div>
   </div>
-  <RenameDialog
-    v-if="showRenameDialog"
-    v-model="showRenameDialog"
-    :entity="
-      $route.name === 'Folder'
-        ? $store.state?.currentFolder
-        : $store.state?.entityInfo[0]
-    "
-    @success="
-      () => {
-        showRenameDialog = false;
-        $resources.getUpdatedEntityTitle.fetch();
-      }
-    " />
 </template>
-<script>
-import RenameDialog from "@/components/RenameDialog.vue";
+<script setup lang="ts">
+import { useWindowSize } from '@vueuse/core'
+import { computed } from 'vue'
+import { RouterLinkProps, useRouter } from 'vue-router'
+import Dropdown from '../components/Dropdown.vue'
+import Button from '../components/Button.vue'
 
-export default {
-  name: "Breadcrumbs",
-  components: { RenameDialog },
-  data() {
+interface BreadcrumbItem {
+  label: string
+  route?: RouterLinkProps['to']
+  onClick?: () => void
+  [key: string]: any
+}
+
+interface BreadcrumbsProps {
+  items: BreadcrumbItem[]
+}
+
+const props = defineProps<BreadcrumbsProps>()
+
+const router = useRouter()
+const { width } = useWindowSize()
+
+const items = computed(() => {
+  return (props.items || []).filter(Boolean)
+})
+
+const dropdownItems = computed(() => {
+  if (width.value > 640) return []
+
+  let allExceptLastTwo = items.value.slice(0, -2)
+  return allExceptLastTwo.map((item) => {
+    let onClick = item.onClick ? item.onClick : () => router.push(item.route)
     return {
-      title: "",
-      oldTitle: "",
-      showRenameDialog: false,
-    };
-  },
+      ...item,
+      icon: null,
+      label: item.label,
+      onClick,
+    }
+  })
+})
 
-  watch: {
-    currentTitle: {
-      handler(value) {
-        document.title = value;
-      },
-    },
-  },
+const crumbs = computed(() => {
+  if (width.value > 640) return items.value
 
-  computed: {
-    breadcrumbLinks() {
-      return this.$store.state.currentBreadcrumbs;
-    },
-    currentTitle: {
-      get() {
-        return this.breadcrumbLinks[this.breadcrumbLinks.length - 1].label;
-      },
-      set(newValue) {
-        return (this.breadcrumbLinks[this.breadcrumbLinks.length - 1].label =
-          newValue);
-      },
-    },
-    currentRoute() {
-      return this.breadcrumbLinks[this.breadcrumbLinks.length - 1].route;
-    },
-    currentEntityName() {
-      return this.currentRoute.split("/")[2];
-    },
-  },
-  methods: {
-    isLastItem(index) {
-      return this.breadcrumbLinks.length > 1
-        ? index === this.breadcrumbLinks.length - 1
-        : false;
-    },
-    canShowRenameDialog() {
-      if (this.$route.name === "Folder") {
-        this.$store.state.currentFolder.owner === "Me";
-        return (this.showRenameDialog = true);
-      } else if (
-        (this.$store.state.entityInfo[0]?.owner === "Me") |
-        (this.$store.state.entityInfo[0]?.write === 1)
-      ) {
-        return (this.showRenameDialog = true);
-      }
-    },
-  },
-  resources: {
-    getUpdatedEntityTitle() {
-      return {
-        url: "drive.api.files.get_title",
-        params: {
-          entity_name: this.currentEntityName,
-          fields: "title",
-        },
-        onSuccess(data) {
-          this.currentTitle = data;
-        },
-        onError(error) {
-          if (error.messages) {
-            this.errorMessage = error.messages.join("\n");
-          } else {
-            this.errorMessage = error.message;
-          }
-        },
-      };
-    },
-  },
-};
+  let lastTwo = items.value.slice(-2)
+  return lastTwo
+})
 </script>
