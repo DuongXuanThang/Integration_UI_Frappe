@@ -83,11 +83,8 @@
           row-key="id"
           
         />
-  
-   
   </div>
     </template>
-    
     <script setup lang="ts">
    import FormControl from '../components/FormControl.vue'
    import ListView from '../components/ListView/ListView.vue';
