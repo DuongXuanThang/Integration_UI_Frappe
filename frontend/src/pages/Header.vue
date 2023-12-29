@@ -17,7 +17,7 @@
 >
   Click
 </Button> -->
-<Dropdown :options="dropdownOptions"  :button="{label: 'Actions', }"  />
+<!-- <Dropdown :options="dropdownOptions"  :button="{label: 'Actions', }"  /> -->
     </div>
   </header>
 </template>
@@ -54,12 +54,12 @@ export default {
 /* Add styling for the header */
 header {
   display: flex;
-  background-color: #811af7;
+  background: linear-gradient(to right, #56ab2f, #6f9f33);
   color: white;
   padding: 10px;
   text-align: left;
   height: 50px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .header-icons {
   margin-left: auto;

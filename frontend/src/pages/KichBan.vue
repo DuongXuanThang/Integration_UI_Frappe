@@ -2,11 +2,11 @@
     <div style="display: flex; justify-content: end;padding: 10px;">
         <Dropdown  :options="[
       {
-        label: 'Thêm sản phẩm',
+        label: 'Thêm kịch bản',
         value: '1',
       },
       {
-        label: 'Xoa san pham',
+        label: 'Xoa kịch bản',
         value: '1',
       },
       {
@@ -18,14 +18,14 @@
         value: '1',
       },
     ]"  :button="{label: '...', }"  style="margin-right: 10px;" />
-        <Button class="btn-save" ><i class="fa-solid fa-plus" style="font-size: 11px;"></i> Thêm sản phẩm</Button>
+        <Button class="btn-save" ><i class="fa-solid fa-plus" style="font-size: 11px;"></i>Thêm kịch bản</Button>
     </div>
  <ListView
         class="h-auto"
         :columns="simple_columns"
         :rows="simple_rows"
         :options="{
-          getRowRoute: (row) => ({ name: 'product', params: { productId: row.id } }),
+          getRowRoute: (row) => ({ name: 'KichBanDetail', params: { KichBanId: row.id } }),
           selectable: state.selectable,
           showTooltip: state.showTooltip,
         }"
@@ -45,72 +45,67 @@ const state = reactive({
 })
 const simple_columns = [
   {
-    label: 'Mã sản phẩm',
+    label: 'Tên kịch bản',
     key: 'code',
     width: 3,
-  },
-  {
-    label: 'Tên sản phẩm',
-    key: 'name',
-    width: '200px',
   },
   {
     label: 'Mô tả',
     key: 'description',
   },
   {
-    label: 'Ảnh',
-    key: 'photo',
+    label: 'Nhân viên',
+    key: 'user',
   },
 ]
 
 const simple_rows = [
   {
     id: 1,
-    code: 'PD001',
+    code: 'Giám sát 1',
     name: 'Dove',
     description: 'This template ',
-    email: 'john@doe.com',
+    user: 'xuanthang@doe.com',
     photo: '/files/img_4.jpg',
     status: 'Active',
     role: 'Developer',
   },
   {
     id: 2,
-    code: 'PD002',
+    code: 'Giám sát 2',
     name: 'Cocacola',
     description: 'This template ',
-    email: 'jane@doe.com',
+    user: 'xuandien@doe.com',
     status: 'Inactive',
     role: 'HR',
     photo: '/files/img_4.jpg'
   },
   {
     id: 3,
-    code: 'PD003',
+    code: 'Giám sát 3',
     name: 'Custas',
     description: 'custom frontend',
-    email: 'john@doe.com',
+    user: 'xuantrung@doe.com',
     status: 'Active',
     role: 'Developer',
     photo: '/files/img_4.jpg'
   },
   {
     id: 4,
-    code: 'PD004',
+    code: 'Giám sát 4',
     name: 'Banh Hoa Cuc',
     description: 'This template ',
-    email: 'john@doe.com',
+    user: 'xuanduy@doe.com',
     status: 'Active',
     role: 'Developer',
     photo: '/files/img_4.jpg'
   },
   {
     id: 5,
-    code: 'PD005',
+    code: 'Giám sát 5',
     name: 'Banh Milano',
     description: 'rors while using the ',
-    email: 'john@doe.com',
+    user: 'xuanthu@doe.com',
     status: 'Active',
     role: 'Developer',
     photo: '/files/img_4.jpg'

@@ -18,14 +18,14 @@
         value: '1',
       },
     ]"  :button="{label: '...', }"  style="margin-right: 10px;" />
-        <Button class="btn-save" ><i class="fa-solid fa-plus" style="font-size: 11px;"></i> Thêm sản phẩm</Button>
+        <Button class="btn-save" ><i class="fa-solid fa-plus" style="font-size: 11px;"></i> Thêm báo cáo</Button>
     </div>
  <ListView
         class="h-auto"
         :columns="simple_columns"
         :rows="simple_rows"
         :options="{
-          getRowRoute: (row) => ({ name: 'product', params: { productId: row.id } }),
+          getRowRoute: (row) => ({ name: 'ReportDetail', params: { ReportId: row.id } }),
           selectable: state.selectable,
           showTooltip: state.showTooltip,
         }"
@@ -45,75 +45,76 @@ const state = reactive({
 })
 const simple_columns = [
   {
-    label: 'Mã sản phẩm',
+    label: 'Kịch bản',
     key: 'code',
     width: 3,
   },
   {
-    label: 'Tên sản phẩm',
+    label: 'Sản phẩm',
     key: 'name',
     width: '200px',
   },
   {
-    label: 'Mô tả',
-    key: 'description',
-  },
-  {
-    label: 'Ảnh',
-    key: 'photo',
-  },
+    label: 'Số lượng',
+    key: 'quantity',
+  }
 ]
 
 const simple_rows = [
   {
     id: 1,
-    code: 'PD001',
+    code: 'Giám sát 1',
     name: 'Dove',
     description: 'This template ',
     email: 'john@doe.com',
     photo: '/files/img_4.jpg',
     status: 'Active',
     role: 'Developer',
+    quantity: "1"
   },
   {
     id: 2,
-    code: 'PD002',
+    code: 'Giám sát 1',
     name: 'Cocacola',
     description: 'This template ',
     email: 'jane@doe.com',
     status: 'Inactive',
     role: 'HR',
-    photo: '/files/img_4.jpg'
+    photo: '/files/img_4.jpg',
+    quantity: '3'
   },
   {
     id: 3,
-    code: 'PD003',
+    code: 'Giám sát 1',
     name: 'Custas',
     description: 'custom frontend',
     email: 'john@doe.com',
     status: 'Active',
     role: 'Developer',
-    photo: '/files/img_4.jpg'
+    photo: '/files/img_4.jpg',
+    quantity: '6'
   },
   {
     id: 4,
-    code: 'PD004',
+    code: 'Giám sát 1',
     name: 'Banh Hoa Cuc',
     description: 'This template ',
     email: 'john@doe.com',
     status: 'Active',
     role: 'Developer',
-    photo: '/files/img_4.jpg'
+    photo: '/files/img_4.jpg',
+    quantity: 8
   },
   {
     id: 5,
-    code: 'PD005',
+    code: 'Giám sát 1',
     name: 'Banh Milano',
     description: 'rors while using the ',
     email: 'john@doe.com',
     status: 'Active',
     role: 'Developer',
-    photo: '/files/img_4.jpg'
+    photo: '/files/img_4.jpg',
+    quantity: 10
   },
 ]
 // const redirectToCreateProduct = () => {
