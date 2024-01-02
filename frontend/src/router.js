@@ -32,6 +32,11 @@ const routes = [
     component: () => import('@/pages/ProductDetail.vue'),
   },
   {
+    path: '/new-product',
+    name: 'new-product',
+    component: () => import('@/pages/NewProduct.vue'),
+  },
+  {
     path: '/KichBan/:KichBanId',
     name: 'KichBanDetail',
     component: () => import('@/pages/KichBanDetail.vue'),

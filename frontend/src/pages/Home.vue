@@ -22,7 +22,7 @@
       :button="{ label: '...' }"
       style="margin-right: 10px"
     />
-    <Button class="btn-save"
+    <Button class="btn-save" @click="handleButtonClick"
       ><i class="fa-solid fa-plus" style="font-size: 11px"></i> Thêm sản
       phẩm</Button
     >
@@ -48,6 +48,7 @@ import ListView from '@/components/ListView/ListView.vue'
 import { Dropdown, FeatherIcon } from 'frappe-ui'
 import { call } from 'frappe-ui'
 import { onMounted, reactive } from 'vue'
+import { useRouter } from 'vue-router';
 export default {
   name: 'Home',
   components: {
@@ -84,6 +85,11 @@ export default {
   async mounted() {
     this.$resources.getListProduct.fetch()
   },
+  methods: {
+    handleButtonClick() {
+      this.$router.push('/new-product');
+    },
+  },
   resources: {
     getListProduct() {
       return {
@@ -93,7 +99,7 @@ export default {
           for (let i = 0; i < data.length; i++) {
             let objrow = {
               id: data[i].name,
-              code: data[i].name,
+              code: data[i].product_code,
               name: data[i].product_name,
               description: data[i].product_description,
               email: 'john@doe.com',

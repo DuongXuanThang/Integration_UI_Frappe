@@ -65,7 +65,6 @@
         value: '1',
       },
     ]"
-    v-model="state.typeProduct"
     class="pdd-class"
   />
   <ListView
@@ -73,8 +72,8 @@
         :columns="simple_columns"
         :rows="simple_rows"
         :options="{
-          selectable: state.selectable,
-          showTooltip: state.showTooltip,
+          selectable: true,
+          showTooltip: true,
         }"
         row-key="id"
         
@@ -103,23 +102,13 @@
  import { h } from 'vue';
 import { Dropdown,FeatherIcon, createListResource } from 'frappe-ui';
  const state = reactive({
-  size: 'sm',
-  variant: 'subtle',
-  placeholder: 'Placeholder',
-  disabled: false,
-  label: 'Label',
   modelValuebarcode:'',
-  modelValuecode: 'PD001',
+  modelValuecode: '',
   modelValue: '',
-  valueName:'Dover',
+  valueName:'',
   valueDescription:"",
-  selectable: true,
-  showTooltip: true,
-  typeProduct:  {
-        label: 'Thực phẩm nhanh',
-        value: '1',
-      }
 })
+
 const inputTypes = [
   'text',
   'number',
@@ -168,40 +157,22 @@ const simple_rows = [
 
   // Code bạn muốn chạy khi component được mounted
   const router = useRouter();
-  const idProduct = router.currentRoute.value.params.productId
-  console.log(); // Đối tượng params\
+  
   const resource = createListResource({
   doctype: 'Product',
-  fields: ["*"],
-  orderBy: 'creation desc',
-  filters: {
-    name: idProduct
-  },
-  start: 0,
-  pageLength: 5,
-  onSuccess(data) {
-    const datItem = data[0];
-    console.log(datItem);
-    state.modelValuebarcode = datItem.barcode
-    state.modelValuecode = datItem.product_code
-    state.valueName = datItem.product_name
-    state.valueDescription = datItem.product_description
-  }
-})
-resource.reload();
+  })
 const handleButtonClick = () => {
-  resource.setValue.submit({
-       'name': idProduct,
-       'product_code': state.modelValuecode,
-      onSuccess(){
-        resource.load() 
-        alert('Saved')
+ 
+  const newproduct = reactive({
+    barcode : state.modelValuebarcode,
+    product_code : state.modelValuecode,
+    product_name : state.valueName,
+    product_description : state.valueDescription
+  })
+  resource.insert.submit(newproduct)
+  resource.reload();
+  router.push('/');
 }
-
-})
-
-  // Thêm logic xử lý khác nếu cần
-};
   </script>
   <style scoped>
   /* Add styling for the about page */
