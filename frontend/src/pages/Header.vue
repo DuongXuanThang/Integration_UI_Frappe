@@ -1,6 +1,8 @@
 <template>
   <header>
-    <h1>VGM APP</h1>
+    <a class="ml-6 text-3xl font-bold text-gray-50 dark:text-gray-200" href="#">
+      VGM Audit App
+    </a>
     <div class="header-icons">
       <i class="fas fa-search"></i>
       <i class="fas fa-bell"></i>

@@ -7,7 +7,18 @@
       <slot>
         <ListHeader />
         <ListRows />
-        <ListSelectBanner v-if="_options.selectable" />
+        <ListSelectBanner>
+          <template #actions="{ unselectAll }">
+            <div class="flex gap-2">
+              <Button variant="ghost" label="Delete" />
+              <Button
+                variant="ghost"
+                label="Unselect all"
+                @click="unselectAll"
+              />
+            </div>
+          </template>
+        </ListSelectBanner>
       </slot>
     </div>
   </div>

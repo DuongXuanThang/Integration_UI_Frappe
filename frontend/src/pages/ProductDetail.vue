@@ -72,6 +72,7 @@
         class="h-auto pdd-class"
         :columns="simple_columns"
         :rows="simple_rows"
+        
         :options="{
           selectable: state.selectable,
           showTooltip: state.showTooltip,
@@ -94,14 +95,14 @@
 </div>
   </template>
   
-  <script setup lang="ts">
+  <script setup>
  import FormControl from '../components/FormControl.vue'
  import ListView from '../components/ListView/ListView.vue';
  import { reactive } from 'vue'
  import { onMounted, ref } from 'vue';
  import { useRouter } from 'vue-router';
  import { h } from 'vue';
-import { Dropdown,FeatherIcon, createListResource } from 'frappe-ui';
+import { Dropdown,FeatherIcon, createDocumentResource, createListResource ,createResource} from 'frappe-ui';
  const state = reactive({
   size: 'sm',
   variant: 'subtle',
@@ -135,57 +136,55 @@ const simple_columns = [
   {
     label: 'STT',
     key: 'code',
-    width: 3,
+    width: '20%',
   },
   {
     label: 'Đường dẫn ảnh',
     key: 'photo',
+    width: '40%',
   }
 ]
 
-const simple_rows = [
-  {
-    id: 1,
-    code: '1',
-    name: 'Dove',
-    description: 'This template ',
-    email: 'john@doe.com',
-    photo: '/files/img_4.jpg',
-    status: 'Active',
-    role: 'Developer',
-  },
-  {
-    id: 2,
-    code: '2',
-    name: 'Cocacola',
-    description: 'This template ',
-    email: 'jane@doe.com',
-    status: 'Inactive',
-    role: 'HR',
-    photo: '/files/img_4.jpg'
-  },
-]
+const simple_rows = ref([])
 
   // Code bạn muốn chạy khi component được mounted
   const router = useRouter();
   const idProduct = router.currentRoute.value.params.productId
-  console.log(); // Đối tượng params\
-  const resource = createListResource({
+  // const resourceProductImage = createResource({
+  //   url: 'frappeui.api.get_list',
+  //   method: 'GET',
+  //   params: {
+  //     id: idProduct
+  //   },
+  //   onSuccess(data) {
+  //     console.log(data);
+     
+  //   },
+  //   onError(error){
+  //     console.log(error)
+  //   }
+  // })
+  // console.log(resourceProductImage);
+  // resourceProductImage.reload();
+  const resource = createDocumentResource({
   doctype: 'Product',
-  fields: ["*"],
-  orderBy: 'creation desc',
-  filters: {
-    name: idProduct
-  },
-  start: 0,
-  pageLength: 5,
+  name: idProduct,
   onSuccess(data) {
-    const datItem = data[0];
+    const datItem = data
     console.log(datItem);
     state.modelValuebarcode = datItem.barcode
     state.modelValuecode = datItem.product_code
     state.valueName = datItem.product_name
     state.valueDescription = datItem.product_description
+    let rows = [] 
+    for(let i = 0; i < datItem.photos.length;i++){
+      let obj = {
+        code : i + 1,
+        photo: datItem.photos[i].uri_image
+      }
+      rows.push(obj)
+    }
+    simple_rows.value = rows
   }
 })
 resource.reload();
@@ -193,6 +192,9 @@ const handleButtonClick = () => {
   resource.setValue.submit({
        'name': idProduct,
        'product_code': state.modelValuecode,
+       'barcode': state.modelValuebarcode,
+       'product_name': state.valueName,
+        product_description: state.valueDescription,
       onSuccess(){
         resource.load() 
         alert('Saved')

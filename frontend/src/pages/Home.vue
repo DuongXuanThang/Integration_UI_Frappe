@@ -7,16 +7,16 @@
           value: '1',
         },
         {
-          label: 'Xoa san pham',
-          value: '1',
+          label: 'Xóa sản phầm',
+          value: '2',
         },
         {
           label: 'In',
-          value: '1',
+          value: '3',
         },
         {
-          label: 'Sao chep',
-          value: '1',
+          label: 'Sao chép',
+          value: '4',
         },
       ]"
       :button="{ label: '...' }"
@@ -31,11 +31,13 @@
     class="h-auto"
     :columns="simple_columns"
     :rows="simple_rows"
+    @update:selections = "updateSelection"
     :options="{
       getRowRoute: (row) => ({
         name: 'product',
         params: { productId: row.id },
       }),
+     
       selectable: selectable,
       showTooltip: showTooltip,
     }"
@@ -62,7 +64,7 @@ export default {
       {
         label: 'Mã sản phẩm',
         key: 'code',
-        width: "20%",
+        width: "10%",
       },
       {
         label: 'Tên sản phẩm',
@@ -75,8 +77,8 @@ export default {
         width: '35%',
       },
       {
-        label: 'Ảnh',
-        key: 'photo',
+        label: 'Loại sản phẩm',
+        key: 'category',
         width :"20%"
       },
     ],
@@ -86,9 +88,16 @@ export default {
     this.$resources.getListProduct.fetch()
   },
   methods: {
+    updateSelection(data){
+      console.log(data);
+    },
     handleButtonClick() {
       this.$router.push('/new-product');
     },
+   handleRowClick (row) {
+  // Xử lý khi dòng được click
+  console.log('Row clicked:', row);
+}
   },
   resources: {
     getListProduct() {
@@ -106,6 +115,7 @@ export default {
               photo: '/files/img_4.jpg',
               status: 'Active',
               role: 'Developer',
+              category : data[i].category,
             }
             this.simple_rows.push(objrow)
           }
