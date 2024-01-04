@@ -6,7 +6,10 @@
   </template>
   
   <script>
+  import Toast from '@/components/Toast.vue'
   export default {
+    components: {
+    }
     // Add component logic here
   };
   </script>

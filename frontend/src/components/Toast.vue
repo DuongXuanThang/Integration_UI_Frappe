@@ -1,6 +1,6 @@
 <template>
   <div
-    class="my-2 min-w-[15rem] max-w-[40rem] rounded-lg border bg-white p-4 shadow-md"
+    class="my-2 min-w-[15rem] max-w-[40rem] rounded-lg border bg-white p-4 shadow-md" :style="{ zIndex: zIndex }"
   >
     <div class="flex items-start">
       <div v-if="icon" class="mr-3 grid h-5 w-5 place-items-center">
@@ -67,6 +67,10 @@ export default {
       type: Number,
       default: 5,
     },
+    zIndex:{
+      type: Number,
+      default:1000
+    }
   },
   emits: ['close'],
   components: {

@@ -150,22 +150,7 @@ const simple_rows = ref([])
   // Code bạn muốn chạy khi component được mounted
   const router = useRouter();
   const idProduct = router.currentRoute.value.params.productId
-  // const resourceProductImage = createResource({
-  //   url: 'frappeui.api.get_list',
-  //   method: 'GET',
-  //   params: {
-  //     id: idProduct
-  //   },
-  //   onSuccess(data) {
-  //     console.log(data);
-     
-  //   },
-  //   onError(error){
-  //     console.log(error)
-  //   }
-  // })
-  // console.log(resourceProductImage);
-  // resourceProductImage.reload();
+ 
   const resource = createDocumentResource({
   doctype: 'Product',
   name: idProduct,
@@ -188,6 +173,7 @@ const simple_rows = ref([])
   }
 })
 resource.reload();
+
 const handleButtonClick = () => {
   resource.setValue.submit({
        'name': idProduct,
@@ -197,11 +183,11 @@ const handleButtonClick = () => {
         product_description: state.valueDescription,
       onSuccess(){
         resource.load() 
-        alert('Saved')
-}
-
-})
-
+      }
+      
+},
+)
+alert("Update succesfully")
   // Thêm logic xử lý khác nếu cần
 };
   </script>

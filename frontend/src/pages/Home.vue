@@ -1,4 +1,13 @@
 <template>
+   <!-- <Toast
+      v-if="showToast"
+      :type = typeToast
+      :zIndex = 1000
+      :position= posToast
+      :title=titleToast
+      :text=text
+      @close="hideToast"
+    /> -->
   <div style="display: flex; justify-content: end; padding: 10px">
     <Dropdown
       :options="[
@@ -32,6 +41,7 @@
     :columns="simple_columns"
     :rows="simple_rows"
     @update:selections = "updateSelection"
+    @deleteSelection = "deleteSelection"
     :options="{
       getRowRoute: (row) => ({
         name: 'product',
@@ -47,17 +57,21 @@
 
 <script>
 import ListView from '@/components/ListView/ListView.vue'
-import { Dropdown, FeatherIcon } from 'frappe-ui'
-import { call } from 'frappe-ui'
-import { onMounted, reactive } from 'vue'
-import { useRouter } from 'vue-router';
+import Toast from '@/components/Toast.vue'
+import { Dropdown, FeatherIcon,createResource } from 'frappe-ui'
 export default {
   name: 'Home',
   components: {
     ListView,
     Dropdown,
+    Toast
   },
   data: () => ({
+    posToast:'top-center',
+    typeToast: '',
+    showToast: false,
+    titleToast:'alo 123',
+    text: '',
     selectable: true,
     showTooltip: true,
     simple_columns: [
@@ -88,8 +102,39 @@ export default {
     this.$resources.getListProduct.fetch()
   },
   methods: {
-    updateSelection(data){
+    async deleteSelection(selected){
+      let arrSelected = [...selected]
+      const resourceDeleteProduct = createResource({
+    url: 'frappeui.api.deleteList',
+    method: 'POST',
+    params: {
+      items:JSON.stringify(arrSelected),
+      doctype:"Product"
+    },
+    onSuccess(data) {
       console.log(data);
+      if(data.status =='error'){
+        alert(data.message);
+      }else{
+        alert("Delete succesfully");
+      }
+     
+    },
+    onError(error){
+      console.log(error)
+    },
+    
+  })
+  resourceDeleteProduct.reload();
+    },
+    updateSelection(data){
+      this.showToast = true;
+      setTimeout(() => {
+      this.showToast = false;
+  }, 5000);
+    },
+    hideToast(){
+      this.showToast = false;
     },
     handleButtonClick() {
       this.$router.push('/new-product');

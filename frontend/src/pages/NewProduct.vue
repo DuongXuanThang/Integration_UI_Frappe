@@ -189,20 +189,19 @@ const handleButtonClick = () => {
     },
     onSuccess(data) {
       console.log(data);
-     
+      alert("Add succesfully");
     },
     onError(error){
       console.log(error)
     }
   })
- console.log(resourceProductImage);
   resourceProductImage.reload();
   // resource.insert.submit(newproduct)
-  // resource.reload();
-  // router.push('/');
-  // router.afterEach(() => {
-  //       location.reload();
-  //     });
+  resource.reload();
+  router.push('/');
+  router.afterEach(() => {
+        location.reload();
+      });
 }
 const objUploadArgs = {
   'doctype': "Product_Image",

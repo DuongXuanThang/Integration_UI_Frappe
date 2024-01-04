@@ -10,7 +10,7 @@
         <ListSelectBanner>
           <template #actions="{ unselectAll }">
             <div class="flex gap-2">
-              <Button variant="ghost" label="Delete" />
+              <Button variant="ghost" @click="deleteSelection" label="Delete" />
               <Button
                 variant="ghost"
                 label="Unselect all"
@@ -58,9 +58,7 @@ const props = defineProps({
 })
 
 let selections = reactive(new Set())
-
-const emit = defineEmits(['update:selections'])
-
+const emit = defineEmits(['update:selections','deleteSelection'])
 watch(selections, (value) => {
   emit('update:selections', value)
 })
@@ -82,7 +80,9 @@ const allRowsSelected = computed(() => {
   if (!props.rows.length) return false
   return selections.size === props.rows.length
 })
-
+function deleteSelection(){
+  emit('deleteSelection',selections);
+}
 function toggleRow(row) {
   if (!selections.delete(row)) {
     selections.add(row)
