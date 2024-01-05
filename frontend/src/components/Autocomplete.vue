@@ -4,7 +4,7 @@
       <template #target="{ open: openPopover, togglePopover }">
         <slot name="target" v-bind="{ open: openPopover, togglePopover }">
           <div class="w-full">
-            <button
+            <Button
               class="flex h-7 w-full items-center justify-between gap-2 rounded bg-gray-100 px-2 py-1 transition-colors hover:bg-gray-200 focus:ring-2 focus:ring-gray-400"
               :class="{ 'bg-gray-200': isComboboxOpen }"
               @click="() => togglePopover()"
@@ -26,7 +26,7 @@
                 class="h-4 w-4 text-gray-600"
                 aria-hidden="true"
               />
-            </button>
+            </Button>
           </div>
         </slot>
       </template>
@@ -53,12 +53,12 @@
                   autocomplete="off"
                   placeholder="Search"
                 />
-                <button
+                <Button
                   class="absolute right-0 inline-flex h-7 w-7 items-center justify-center"
                   @click="selectedValue = null"
                 >
                   <FeatherIcon name="x" class="w-4" />
-                </button>
+                </Button>
               </div>
             </div>
             <div

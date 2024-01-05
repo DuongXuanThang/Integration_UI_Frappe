@@ -1,14 +1,6 @@
 <template>
-   <!-- <Toast
-      v-if="showToast"
-      :type = typeToast
-      :zIndex = 1000
-      :position= posToast
-      :title=titleToast
-      :text=text
-      @close="hideToast"
-    /> -->
   <div style="display: flex; justify-content: end; padding: 10px">
+    
     <Dropdown
       :options="[
         {
@@ -36,10 +28,44 @@
       phẩm</Button
     >
   </div>
+  <div style="display: flex;padding-bottom: 10px;">
+    <div style="display: flex;padding-right: 10px;"> 
+    <TextInput
+    style="padding-right: 10px;"
+    :type="'text'"
+    size="sm"
+    variant="outline"
+    placeholder="Mã sản phẩm"
+    :disabled="false"
+    v-model="searchTerm"
+    @input="filterList(searchTerm)"
+  />
+  <TextInput
+    :type="'text'"
+    size="sm"
+    variant="outline"
+    placeholder="Tên sản phẩm"
+    :disabled="false"
+    modelValue=""
+  />
+  </div>
+  <div>
+    <ListFilter 
+ :docfields="yourDocFields"
+ :modelValue = "modelValueFilter"
+ @update:modelValue ="getData"
+ />
+     
+  </div>
+  
+  </div>
+ 
+ 
+
   <ListView
     class="h-auto"
     :columns="simple_columns"
-    :rows="simple_rows"
+    :rows="isSearching ? filteredRows : simple_rows"
     @update:selections = "updateSelection"
     @deleteSelection = "deleteSelection"
     :options="{
@@ -53,20 +79,49 @@
     }"
     row-key="id"
   />
+  <p-button label="Click me" @click="handleClick"></p-button>
 </template>
 
 <script>
 import ListView from '@/components/ListView/ListView.vue'
+
 import Toast from '@/components/Toast.vue'
-import { Dropdown, FeatherIcon,createResource } from 'frappe-ui'
+import TextInput from '@/components/TextInput.vue'
+import ListFilter from '@/components/ListFilter/ListFilter.vue'
+import { Dropdown, FeatherIcon,createResource,Autocomplete,createListResource } from 'frappe-ui'
 export default {
   name: 'Home',
   components: {
     ListView,
     Dropdown,
-    Toast
+    Toast,
+    TextInput,
+    ListFilter,
+    Autocomplete
   },
   data: () => ({
+    searchTerm: '',
+    filteredRows: [],
+    lable: "",
+    yourDocFields: [{
+		label: 'Name',
+		value: 'product_name',
+		fieldname: 'product_name',
+		fieldtype: 'Data',
+	},
+    {
+      label: 'Ten san pham',fieldname: 'product_name',fieldtype: 'Data',
+    },
+    {
+      label: 'Mo ta',fieldname: 'product_description',fieldtype: 'Data'
+    },
+    {
+      label: 'Loai san pham',fieldname: 'category',fieldtype: 'Data'
+    }
+  ],
+    modelValueFilter: {
+      product_name: ['like','']
+    },
     posToast:'top-center',
     typeToast: '',
     showToast: false,
@@ -102,6 +157,19 @@ export default {
     this.$resources.getListProduct.fetch()
   },
   methods: {
+    filterList() {
+      if (this.searchTerm !== "") {
+        this.filteredRows = this.simple_rows.filter(obj =>
+          obj.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+        this.isSearching = true; // Đánh dấu là đang tìm kiếm
+      } else {
+        this.isSearching = false; 
+      }
+  },
+    getData(data){
+      console.log(data);
+    },
     async deleteSelection(selected){
       let arrSelected = [...selected]
       const resourceDeleteProduct = createResource({
@@ -163,6 +231,7 @@ export default {
               category : data[i].category,
             }
             this.simple_rows.push(objrow)
+          
           }
         },
       }

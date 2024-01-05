@@ -1,19 +1,19 @@
 <template>
   <NestedPopover>
     <template #target>
-      <Button label="Filter">
+      <Button label="Filter" variant="outline">
         <template #prefix><FilterIcon class="h-4" /></template>
-        <template v-if="filters.size" #suffix>
+        <template v-if="filters.length" #suffix>
           <div
             class="flex h-5 w-5 items-center justify-center rounded bg-gray-900 pt-[1px] text-2xs font-medium text-white"
           >
-            {{ filters.size }}
+            {{ filters.length }}
           </div>
         </template>
       </Button>
     </template>
     <template #body="{ close }">
-      <div class="my-2 rounded-lg border border-gray-100 bg-white shadow-xl">
+      <div class="my-2 rounded-lg border border-gray-100 bg-white shadow-xl" >
         <div class="min-w-[400px] p-2">
           <div
             v-if="filters.length"
@@ -28,7 +28,7 @@
               >
                 {{ i == 0 ? 'Where' : 'And' }}
               </div>
-              <div id="fieldname" class="!min-w-[140px] flex-1">
+              <div id="fieldname" class="!min-w-[140px] flex-1 relative">
                 <Autocomplete
                   :value="filter.fieldname"
                   :options="fields"
@@ -79,8 +79,8 @@
           >
             Empty - Choose a field to filter by
           </div>
-          <div class="flex items-center justify-between gap-2">
-            <Autocomplete
+          <div class="flex items-center justify-between gap-2 ">
+            <!-- <Autocomplete
               value=""
               :options="fields"
               @change="(field) => addFilter(field.value)"
@@ -90,7 +90,7 @@
                 <Button
                   class="!text-gray-600"
                   variant="ghost"
-                  @click="togglePopover()"
+                  @click="($event) => { $event.stopPropagation(); togglePopover(); }"
                   label="Add filter"
                 >
                   <template #prefix>
@@ -98,7 +98,7 @@
                   </template>
                 </Button>
               </template>
-            </Autocomplete>
+            </Autocomplete> -->
             <Button
               v-if="filters.length"
               class="!text-gray-600"
@@ -108,17 +108,30 @@
             />
           </div>
         </div>
+        <!-- <Button
+              
+              class="!text-gray-600"
+              variant="ghost"
+              label="ac"
+              @click="Find"
+            /> -->
       </div>
     </template>
   </NestedPopover>
 </template>
 
 <script setup>
-import { Autocomplete, FeatherIcon, FormControl } from 'frappe-ui'
+import { Autocomplete } from 'frappe-ui'
 import { computed, h } from 'vue'
 import FilterIcon from './FilterIcon.vue'
 import NestedPopover from './NestedPopover.vue'
 import SearchComplete from './SearchComplete.vue'
+import FormControl from '../FormControl.vue'
+import Button from '../Button.vue'
+// import Autocomplete from '../Autocomplete.vue'
+import FeatherIcon from '../FeatherIcon.vue'
+
+
 
 const typeCheck = ['Check']
 const typeLink = ['Link']
@@ -185,7 +198,9 @@ function makeFiltersList(filtersDict) {
     }
   })
 }
-
+function Find(){
+  emits('update:modelValue', makeFiltersDict(makeFiltersList(props.modelValue)))
+}
 function getField(fieldname) {
   return fields.value.find((f) => f.fieldname === fieldname)
 }
