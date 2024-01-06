@@ -47,6 +47,9 @@
     placeholder="Tên sản phẩm"
     :disabled="false"
     modelValue=""
+    v-model="searchTermName"
+    @input="filterListName(searchTermName)"
+    
   />
   </div>
   <div>
@@ -100,6 +103,7 @@ export default {
     Autocomplete
   },
   data: () => ({
+    searchTermName:'',
     searchTerm: '',
     filteredRows: [],
     lable: "",
@@ -160,7 +164,17 @@ export default {
     filterList() {
       if (this.searchTerm !== "") {
         this.filteredRows = this.simple_rows.filter(obj =>
-          obj.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+          obj.code.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+        this.isSearching = true; // Đánh dấu là đang tìm kiếm
+      } else {
+        this.isSearching = false; 
+      }
+  },
+  filterListName() {
+      if (this.searchTermName !== "") {
+        this.filteredRows = this.simple_rows.filter(obj =>
+          obj.name.toLowerCase().includes(this.searchTermName.toLowerCase())
         );
         this.isSearching = true; // Đánh dấu là đang tìm kiếm
       } else {
