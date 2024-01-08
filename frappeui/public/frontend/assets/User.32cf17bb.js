@@ -1,0 +1,1 @@
+import{_ as o,o as s,d as t,p as a,i as _,f as c}from"./vendor.ae1af255.js";const r={},d=e=>(a("data-v-6e27e5ff"),e=e(),_(),e),p=d(()=>c("h2",null,"About Page",-1)),n=[p];function f(e,u,i,l,v,h){return s(),t("div",null,n)}var x=o(r,[["render",f],["__scopeId","data-v-6e27e5ff"]]);export{x as default};

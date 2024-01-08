@@ -198,7 +198,7 @@ const handleButtonClick = () => {
   resourceProductImage.reload();
   // resource.insert.submit(newproduct)
   resource.reload();
-  router.push('/');
+  router.push('/product');
   router.afterEach(() => {
         location.reload();
       });
