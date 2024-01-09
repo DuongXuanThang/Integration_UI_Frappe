@@ -1,6 +1,5 @@
 <template>
   <div style="display: flex; justify-content: end; padding: 10px">
-    
     <Dropdown
       :options="[
         {
@@ -28,70 +27,66 @@
       phẩm</Button
     >
   </div>
-  <div style="display: flex;padding-bottom: 10px;">
-    <div style="display: flex;padding-right: 10px;"> 
-    <TextInput
-    style="padding-right: 10px;"
-    :type="'text'"
-    size="sm"
-    variant="outline"
-    placeholder="Mã sản phẩm"
-    :disabled="false"
-    v-model="searchTerm"
-    @input="filterList(searchTerm)"
-  />
-  <TextInput
-    :type="'text'"
-    size="sm"
-    variant="outline"
-    placeholder="Tên sản phẩm"
-    :disabled="false"
-    modelValue=""
-    v-model="searchTermName"
-    @input="filterListName(searchTermName)"
-    
-  />
+  <div style="display: flex; padding-bottom: 10px">
+    <div style="display: flex; padding-right: 10px">
+      <TextInput
+        style="padding-right: 10px"
+        :type="'text'"
+        size="sm"
+        variant="outline"
+        placeholder="Mã sản phẩm"
+        :disabled="false"
+        v-model="searchTerm"
+        @input="filterList(searchTerm)"
+      />
+      <TextInput
+        :type="'text'"
+        size="sm"
+        variant="outline"
+        placeholder="Tên sản phẩm"
+        :disabled="false"
+        modelValue=""
+        v-model="searchTermName"
+        @input="filterListName(searchTermName)"
+      />
+    </div>
+    <div>
+      <ListFilter :docfields="yourDocFields" @update:modelValue="getData" />
+    </div>
   </div>
-  <div>
-    <ListFilter 
- :docfields="yourDocFields"
- :modelValue = "modelValueFilter"
- @update:modelValue ="getData"
- />
-     
-  </div>
-  
-  </div>
- 
- 
 
   <ListView
     class="h-auto"
     :columns="simple_columns"
     :rows="isSearching ? filteredRows : simple_rows"
-    @update:selections = "updateSelection"
-    @deleteSelection = "deleteSelection"
+    @update:selections="updateSelection"
+    @deleteSelection="deleteSelection"
     :options="{
       getRowRoute: (row) => ({
         name: 'product',
         params: { productId: row.id },
       }),
-     
+
       selectable: selectable,
       showTooltip: showTooltip,
     }"
     row-key="id"
   />
-  <p-button label="Click me" @click="handleClick"></p-button>
 </template>
 
 <script>
 import ListView from '@/components/ListView/ListView.vue'
-
+import { createToast } from '@/utils/toasts'
 import Toast from '@/components/Toast.vue'
 import TextInput from '@/components/TextInput.vue'
-import ListFilter from '@/components/ListFilter/ListFilter.vue'
-import { Dropdown, FeatherIcon,createResource,Autocomplete,createListResource } from 'frappe-ui'
+import ListFilter from '@/components/ListFilterUpdate/ListFilter.vue'
+import {
+  Dropdown,
+  FeatherIcon,
+  createResource,
+  Autocomplete,
+  createListResource,
+} from 'frappe-ui'
 export default {
   name: 'Home',
   components: {
@@ -100,36 +95,35 @@ export default {
     Toast,
     TextInput,
     ListFilter,
-    Autocomplete
+    Autocomplete,
   },
   data: () => ({
-    searchTermName:'',
+    isSearching: false,
+    searchTermName: '',
     searchTerm: '',
     filteredRows: [],
-    lable: "",
-    yourDocFields: [{
-		label: 'Name',
-		value: 'product_name',
-		fieldname: 'product_name',
-		fieldtype: 'Data',
-	},
-    {
-      label: 'Ten san pham',fieldname: 'product_name',fieldtype: 'Data',
-    },
-    {
-      label: 'Mo ta',fieldname: 'product_description',fieldtype: 'Data'
-    },
-    {
-      label: 'Loai san pham',fieldname: 'category',fieldtype: 'Data'
-    }
-  ],
+    lable: '',
+    yourDocFields: [
+      {
+        label: 'Tên sản phẩm',
+        value: 'product_name',
+        fieldname: 'product_name',
+        fieldtype: 'Data',
+      },
+      {
+        label: 'Mã sản phẩm',
+        value: 'product_code',
+        fieldname: 'product_code',
+        fieldtype: 'Data',
+      },
+    ],
     modelValueFilter: {
-      product_name: ['like','']
+      product_name: ['like', ''],
     },
-    posToast:'top-center',
+    posToast: 'top-center',
     typeToast: '',
     showToast: false,
-    titleToast:'alo 123',
+    titleToast: 'alo 123',
     text: '',
     selectable: true,
     showTooltip: true,
@@ -137,7 +131,7 @@ export default {
       {
         label: 'Mã sản phẩm',
         key: 'code',
-        width: "10%",
+        width: '10%',
       },
       {
         label: 'Tên sản phẩm',
@@ -152,104 +146,130 @@ export default {
       {
         label: 'Loại sản phẩm',
         key: 'category',
-        width :"20%"
+        width: '20%',
       },
     ],
     simple_rows: [],
   }),
   async mounted() {
-    this.getListProduct();
-   // this.$resources.getListProduct.fetch()
+    this.getListProduct()
+    // this.$resources.getListProduct.fetch()
+  },
+  watch: {
+    $route(to, from) {
+      console.log('123123');
+      // Gọi phương thức làm mới dữ liệu ở đây khi route thay đổi
+      this.getListProduct();
+    },
   },
   methods: {
     getListProduct() {
-    const resource = createListResource({
-      doctype: 'Product',
-      fields: ['*'],
-      onSuccess: (data) => {
-        for (let i = 0; i < data.length; i++) {
-          let objrow = {
-            id: data[i].name,
-            code: data[i].product_code,
-            name: data[i].product_name,
-            description: data[i].product_description,
-            email: 'john@doe.com',
-            photo: '/files/img_4.jpg',
-            status: 'Active',
-            role: 'Developer',
-            category: data[i].category,
-          };
-          this.simple_rows.push(objrow);
-        }
-      },
-    });
-    resource.reload();
-  
-},
-    filterList() {
-      if (this.searchTerm !== "") {
-        this.filteredRows = this.simple_rows.filter(obj =>
-          obj.code.toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
-        this.isSearching = true; // Đánh dấu là đang tìm kiếm
-      } else {
-        this.isSearching = false; 
-      }
-  },
-  filterListName() {
-      if (this.searchTermName !== "") {
-        this.filteredRows = this.simple_rows.filter(obj =>
-          obj.name.toLowerCase().includes(this.searchTermName.toLowerCase())
-        );
-        this.isSearching = true; // Đánh dấu là đang tìm kiếm
-      } else {
-        this.isSearching = false; 
-      }
-  },
-    getData(data){
-      console.log(data);
+      const resource = createListResource({
+        doctype: 'Product',
+        fields: ['*'],
+        onSuccess: (data) => {
+          this.simple_rows = [];
+          for (let i = 0; i < data.length; i++) {
+            let objrow = {
+              id: data[i].name,
+              code: data[i].product_code,
+              name: data[i].product_name,
+              description: data[i].product_description,
+              email: 'john@doe.com',
+              photo: '/files/img_4.jpg',
+              status: 'Active',
+              role: 'Developer',
+              category: data[i].category,
+            }
+            this.simple_rows.push(objrow)
+          }
+        },
+      })
+      resource.reload()
     },
-    async deleteSelection(selected){
+    isEmptyObj(...args) {
+      return args.some((arg) => {
+        if (arg === null || arg === undefined) {
+          return true
+        }
+        return Object.keys(arg).length === 0
+      })
+    },
+    filterList() {
+      if (this.searchTerm !== '') {
+        this.filteredRows = this.simple_rows.filter((obj) =>
+          obj.code.toLowerCase().includes(this.searchTerm.toLowerCase())
+        )
+        this.isSearching = true // Đánh dấu là đang tìm kiếm
+      } else {
+        this.isSearching = false
+      }
+    },
+    filterListName() {
+      if (this.searchTermName !== '') {
+        this.filteredRows = this.simple_rows.filter((obj) =>
+          obj.name.toLowerCase().includes(this.searchTermName.toLowerCase())
+        )
+        this.isSearching = true // Đánh dấu là đang tìm kiếm
+      } else {
+        this.isSearching = false
+      }
+    },
+    getData(data) {
+      if (this.isEmptyObj(data)) {
+        console.log('111')
+      } else {
+        console.log('123')
+      }
+      console.log(data)
+    },
+    async deleteSelection(selected) {
       let arrSelected = [...selected]
       const resourceDeleteProduct = createResource({
-    url: 'frappeui.api.deleteList',
-    method: 'POST',
-    params: {
-      items:JSON.stringify(arrSelected),
-      doctype:"Product"
+        url: 'frappeui.api.deleteList',
+        method: 'POST',
+        params: {
+          items: JSON.stringify(arrSelected),
+          doctype: 'Product',
+        },
+        onSuccess: (data) => {
+          console.log(data)
+          if (data.status == 'error') {
+            alert(data.message)
+          } else {
+            // alert('Delete succesfully')
+            createToast({
+				title: 'Xóa sản phầm thành công',
+				variant: 'success',
+			})
+            this.getListProduct();
+    }
+        },
+        // onSuccess(data) {
+         
+        // },
+        onError(error) {
+          console.log(error)
+        },
+      })
+      resourceDeleteProduct.reload()
     },
-    onSuccess(data) {
-      console.log(data);
-      if(data.status =='error'){
-        alert(data.message);
-      }else{
-        alert("Delete succesfully");
-      }
-     
-    },
-    onError(error){
-      console.log(error)
-    },
-    
-  })
-  resourceDeleteProduct.reload();
-    },
-    updateSelection(data){
-      this.showToast = true;
+    updateSelection(data) {
+      this.showToast = true
       setTimeout(() => {
-      this.showToast = false;
-  }, 5000);
+        this.showToast = false
+      }, 5000)
     },
-    hideToast(){
-      this.showToast = false;
+    hideToast() {
+      this.showToast = false
     },
     handleButtonClick() {
-      this.$router.push('/new-product');
+      this.$router.push('/new-product')
     },
-   handleRowClick (row) {
-  // Xử lý khi dòng được click
-  console.log('Row clicked:', row);
-}
+    handleRowClick(row) {
+      // Xử lý khi dòng được click
+      console.log('Row clicked:', row)
+    },
   },
   resources: {
     getListProduct() {
@@ -267,10 +287,9 @@ export default {
               photo: '/files/img_4.jpg',
               status: 'Active',
               role: 'Developer',
-              category : data[i].category,
+              category: data[i].category,
             }
             this.simple_rows.push(objrow)
-          
           }
         },
       }

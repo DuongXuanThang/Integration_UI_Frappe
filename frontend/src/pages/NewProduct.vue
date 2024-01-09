@@ -119,6 +119,7 @@
   </template>
   
   <script setup >
+import { createToast } from '@/utils/toasts'
  import FormControl from '../components/FormControl.vue'
  import ListView from '../components/ListView/ListView.vue';
  import FileUploader from './../components/FileUploader.vue'
@@ -188,15 +189,16 @@ const handleButtonClick = () => {
       action:"Save"
     },
     onSuccess(data) {
-      console.log(data);
-      alert("Add succesfully");
+      createToast({
+				title: 'Thêm mới sản phầm thành công',
+				variant: 'success',
+			})
     },
     onError(error){
       console.log(error)
     }
   })
   resourceProductImage.reload();
-  // resource.insert.submit(newproduct)
   resource.reload();
   router.push('/product');
   router.afterEach(() => {

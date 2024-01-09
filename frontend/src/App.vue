@@ -27,6 +27,7 @@
     
     </div>
   </div>
+  <Toasts />
 </template>
 
 <script>
@@ -34,12 +35,14 @@
 // import Navigation from './pages/Navigation.vue';
 import Content from './pages/Content.vue';
 import Sidebar from "./components/Sidebar.vue";
+import Toasts from '@/utils/toasts'
 export default {
   components: {
     Sidebar,
     // Header,
     // Navigation,
      Content,
+     Toasts
   },
 };
 </script>

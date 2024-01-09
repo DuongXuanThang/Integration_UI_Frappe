@@ -47,7 +47,6 @@ const routes = [
     component: () => import('@/pages/ReportDetail.vue'),
   }
 ]
-
 let router = createRouter({
   history: createWebHistory('/frontend'),
   routes,
